@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Name: VuforiaConfiguration
   m_EditorClassIdentifier: 
   vuforia:
-    vuforiaLicenseKey: 
+    vuforiaLicenseKey: Ad5iq6X/////AAABGQDEXadi308Zj8cPtioYPMEqpdpZqWvp6aLPmapT86F5BOyqU4m79VIes4Fm9XbO/LMbqo215s4952MKc5ADQ3JFQBsqdX1vrBraw1qHsTKHn20lxDNytehnC2ZUWxVLvoQv9edkg/9KXAAzTurZkvN0/zfqimtxXB+8Uu7rVxEnAY/rkuMEOl0b4ekCovI1rdX0hSc6Bsm18pmc0n8mb4L1FVYocab/z3OfHsysm22C4KUK/lviYN27FNdCFcf33p9q4jgH8wxNQ45bxUI7x1hclGm6Xl2Z3K3bJEuGhmyYlTDeGCZCSC2wAOxp6fn9wmUUQt3p4kSbWs+BYUb4yJ88knljG0dfiBdjiAaAvL0Q
     ufoLicenseKey: QVpNVzZsci8vLy8vQUFBQUtIYUtCZElTS2tQaGc3ZVE5K3ZGajFPTXNzSXp4OVdTcEhZa0ZIS3dCbmRwQnM5cEw4MzFMYVhZQlRSdm5kblMrUGhPRmdiVFFJeVloMjUwTUErY3ltYlBkNFlSODNSQkpQMmtNTFNxVkZiNTRoSlZrcjdVN2JJYnhSUFhxVGw1aVdzL2toRDJWWWx5ZXJiOGZjM3pmTXl5aFZCbWJXdFN2Qm0yZHZxRjh1SWwrTEVtbzFSK2VsS09OeHV6TXlxRmtPdzJ6d0txOW0xWmZlcmJOZzVValN3QUxDZXFEUGxBdGRzbnRCSlY5QW52SHl0alg4R0RsVElhcWVSWnlxNmQ2d3BBRU5qY21EU3hEOVV5RnhHL0NzYVZJNG1JZnhDQTZLeXpuRkh5enNUMTJaZE5neEcrbmFPUlVNSElrUEY0TUszdlFPbitmL0o2Q1NNdUg3T0xXVGtnZ3M5K0NuQjdwVGJIeldyb0E2MDY=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
-    maxSimultaneousImageTargets: 1
-    maxSimultaneousObjectTargets: 1
+    maxSimultaneousImageTargets: 10
+    maxSimultaneousObjectTargets: 10
     useDelayedLoadingObjectTargets: 0
     cameraDirection: 0
     mirrorVideoBackground: 0
@@ -44,11 +44,9 @@ MonoBehaviour:
       ContainsMagnet: 0
   databaseLoad:
     dataSetsToLoad:
-    - VuforiaMars_Images
-    - VuforiaMars_VuMark
+    - escate
     dataSetsToActivate:
-    - VuforiaMars_Images
-    - VuforiaMars_VuMark
+    - escate
   videoBackground:
     clippingMode: 0
     numDivisions: 2
@@ -68,7 +66,7 @@ MonoBehaviour:
     autoInitTracker: 0
     autoStartTracker: 0
   webcam:
-    deviceNameSetInEditor: 
+    deviceNameSetInEditor: Sirius USB2.0 Camera
     flipHorizontally: 0
     turnOffWebCam: 0
     renderTextureLayer: 30
