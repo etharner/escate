@@ -3,19 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ActionType
+{
+    Discover,
+    Move,
+    OpenMinorLock,
+    OpenNormalLock,
+    OpenBigLock,
+    Exit,
+    None
+}
+
+
 public class ESCPlayer : MonoBehaviour {
     class Dice
     {
         int count;
         int reserve;
-        Symbol.SymbolType[] symbols;
+        Symbol.SymbolType[] diceValues;
 
-        Dice()
+        public Dice()
         {
             count = 5;
+            reserve = 0;
+            diceValues = new Symbol.SymbolType[10];
         }
 
-        void Degrade(int degradeCount)
+        public void Degrade(int degradeCount)
         {
             count -= degradeCount;
             reserve += degradeCount;
@@ -26,18 +40,19 @@ public class ESCPlayer : MonoBehaviour {
             }
         }
 
-        void Destruct()
+        public void Destruct()
         {
             --count;
             --reserve;
         }
 
-        void Upgrade(int upgradeCount)
+        public void Upgrade(int upgradeCount)
         {
             if (count < 0)
             {
                 count = 1;
                 --reserve;
+                return;
             }
 
             for (var i = 0; i < upgradeCount && reserve >= 0; i++)
@@ -47,17 +62,27 @@ public class ESCPlayer : MonoBehaviour {
             }
         }
 
-        void Synthesize()
+        public void Synthesize()
         {
             ++count;
         }
 
-        void Throw()
+        public void Throw()
         {
             for (var i = 0; i < count; i++)
             {
-                symbols[i] = Symbol.RollSymbol();
+                diceValues[i] = Symbol.RollDiceSymbol();
             } 
+        }
+
+        public void Print()
+        {
+            string diceString = "";
+            for (var i = 0; i < count; i++)
+            {
+                diceString += diceValues[i].ToString() + " ";
+            }
+            Debug.Log(diceString + " ASASD");
         }
     }
 
@@ -66,8 +91,9 @@ public class ESCPlayer : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
