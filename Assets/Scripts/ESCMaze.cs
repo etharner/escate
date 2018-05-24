@@ -6,7 +6,7 @@ public class ESCMaze {
     ESCRoom startRoom;
 
     public int Gems;
-    ESCRoom entrance;
+    public ESCRoom Entrance { get; set; }
     Dictionary<ESCRoom.RoomType, List<ESCRoom>> roomsPool;
     static Dictionary<ESCRoom.RoomType, int> roomsCount = new Dictionary<ESCRoom.RoomType, int>()
     {
@@ -18,6 +18,7 @@ public class ESCMaze {
         { ESCRoom.RoomType.Exit, 1 }
     };
 
+  
     // Use this for initialization
     void Start () {
         roomsPool = new Dictionary<ESCRoom.RoomType, List<ESCRoom>>();
@@ -25,6 +26,7 @@ public class ESCMaze {
         {
             roomsPool[rt].Add(new ESCRoom(this, rt));
         }
+        Entrance = roomsPool[ESCRoom.RoomType.Entrance][0];
 	}
 	
 	// Update is called once per frame

@@ -16,30 +16,36 @@ public class ESCRoom {
         Exit
     }
 
-    public ESCRoom parent { get; set; }
-    ESCRoom[] siblings;
+    public ESCRoom Parent { get; set; }
+    public ESCRoom[] Siblings { get; }
     RoomType type;
-    ESCCondition enterCondition;
-    ESCCondition innerCondition;
+    public ESCCondition EnterCondition;
+    public ESCCondition InnerCondition;
     
 	public ESCRoom(ESCMaze maze, RoomType roomType)
     {
-        parent = null;
+        Parent = null;
         type = roomType;
-        enterCondition = new ESCCondition(maze, ESCCondition.ConditionType.Enter);
+        EnterCondition = new ESCCondition(maze, ESCCondition.ConditionType.Enter);
 
         switch (roomType)
         {
+            case RoomType.Entrance:
+                Siblings = new ESCRoom[2];
+                break;
+
             case RoomType.MinorLock:
-                innerCondition = new ESCCondition(maze, ESCCondition.ConditionType.MinorLock);
+                Siblings = new ESCRoom[ESCUtil.rand.Next(2, 3 + 1)];
+                InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.MinorLock);
                 break;
 
             case RoomType.BigLock:
-                innerCondition = new ESCCondition(maze, ESCCondition.ConditionType.BigLock);
+                Siblings = new ESCRoom[ESCUtil.rand.Next(2, 3 + 1)];
+                InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.BigLock);
                 break;
 
             case RoomType.Exit:
-                innerCondition = new ESCCondition(maze, ESCCondition.ConditionType.Exit);
+                InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.Exit);
                 break;
         }
     }

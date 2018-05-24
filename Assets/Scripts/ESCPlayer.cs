@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum ActionType
@@ -14,89 +15,50 @@ public enum ActionType
     None
 }
 
+public class ESCPlayer {
+    
+    ESCRoom currentRoom;
+    ESCDice dice;
+    ESCMaze maze;
+    Dictionary<ESCRoom, List<ActionType>> roomActions;
+    ESCCondition discoverCondition;
 
-public class ESCPlayer : MonoBehaviour {
-    class Dice
+    public ESCPlayer(ESCMaze m)
     {
-        int count;
-        int reserve;
-        Symbol.SymbolType[] diceValues;
+        dice = new ESCDice();
+        maze = m;
+        currentRoom = m.Entrance;
+        roomActions = new Dictionary<ESCRoom, List<ActionType>>();
+        discoverCondition = new ESCCondition(m, ESCCondition.ConditionType.Discover);
+    }
 
-        public Dice()
+    void AddAction(ESCRoom room)
+    {
+        ActionType action = room.EnterCondition.JudgeActions(dice.DiceValues);
+        if (action != ActionType.None)
         {
-            count = 5;
-            reserve = 0;
-            diceValues = new Symbol.SymbolType[10];
-        }
-
-        public void Degrade(int degradeCount)
-        {
-            count -= degradeCount;
-            reserve += degradeCount;
-
-            if (count < 0)
-            {
-                Debug.Log("Count below 0");
-            }
-        }
-
-        public void Destruct()
-        {
-            --count;
-            --reserve;
-        }
-
-        public void Upgrade(int upgradeCount)
-        {
-            if (count < 0)
-            {
-                count = 1;
-                --reserve;
-                return;
-            }
-
-            for (var i = 0; i < upgradeCount && reserve >= 0; i++)
-            {
-                ++count;
-                --reserve;
-            }
-        }
-
-        public void Synthesize()
-        {
-            ++count;
-        }
-
-        public void Throw()
-        {
-            for (var i = 0; i < count; i++)
-            {
-                diceValues[i] = Symbol.RollDiceSymbol();
-            } 
-        }
-
-        public void Print()
-        {
-            string diceString = "";
-            for (var i = 0; i < count; i++)
-            {
-                diceString += diceValues[i].ToString() + " ";
-            }
-            Debug.Log(diceString + " ASASD");
+            roomActions[room].Add(action);
         }
     }
 
-    ESCRoom currentroom;
-    Dice dice;
+    public void Turn()
+    {
+        dice.Throw();
 
-    // Use this for initialization
-    void Start () {
+        roomActions[currentRoom] = new List<ActionType>() {
+            ActionType.None,
+            currentRoom.InnerCondition.JudgeActions(dice.DiceValues),
+            discoverCondition.JudgeActions(dice.DiceValues)
+        };
 
+        if (currentRoom.Parent != null)
+        {
+            AddAction(currentRoom.Parent);
+        }
 
+        foreach (ESCRoom r in currentRoom.Siblings ?? null)
+        {
+            AddAction(r);
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
