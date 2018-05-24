@@ -27,7 +27,7 @@ public class ESCRoom {
     ESCMaze maze;
     public Dictionary<RoomDirection, ESCRoom> Siblings { get; set; }
     public int SiblingsAlive;
-    RoomType type;
+    public RoomType type; //public
     public ESCCondition EnterCondition;
     public ESCCondition InnerCondition;
     
@@ -38,6 +38,7 @@ public class ESCRoom {
         EnterCondition = new ESCCondition(maze, ESCCondition.ConditionType.Enter);
         SiblingsAlive = 0;
 
+        Siblings = new Dictionary<RoomDirection, ESCRoom>();
         switch (roomType)
         {
             case RoomType.Entrance:
@@ -69,11 +70,12 @@ public class ESCRoom {
 
     public void GenerateDirectionPockets(RoomDirection parentDirection)
     {
+        Siblings = new Dictionary<RoomDirection, ESCRoom>();
+
         var roomDirections = new List<RoomDirection>(Enum.GetValues(typeof(RoomDirection)).Cast<RoomDirection>().ToList());
         roomDirections.Remove(parentDirection);
         Siblings.Add(parentDirection, null);
 
-        Siblings = new Dictionary<RoomDirection, ESCRoom>();
         int siblingsCount = ESCUtil.Rand.Next(2, 3 + 1);
         for (var i = 0; i < siblingsCount; i++)
         {
@@ -92,8 +94,11 @@ public class ESCRoom {
     public void InsertSibling(RoomDirection dir)
     {
         ESCRoom newRoom = maze.RequestRoom();
-        newRoom.GenerateDirectionPockets(dir);
-        Siblings[dir] = maze.RequestRoom();
+        if (newRoom.type != RoomType.Exit)
+        {
+            newRoom.GenerateDirectionPockets(dir);
+        }
+        Siblings[dir] = newRoom;
         SiblingsAlive++;
     }
 }

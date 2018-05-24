@@ -21,6 +21,10 @@ public class ESCMaze {
         roomsPool = new Dictionary<ESCRoom.RoomType, List<ESCRoom>>();
         foreach (ESCRoom.RoomType rt in roomsCount.Keys)
         {
+            if (!roomsPool.ContainsKey(rt))
+            {
+                roomsPool[rt] = new List<ESCRoom>();
+            }
             roomsPool[rt].Add(new ESCRoom(this, rt));
         }
         Entrance = new ESCRoom(this, ESCRoom.RoomType.Entrance);

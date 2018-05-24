@@ -2,18 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class ESCDice
+public class ESCDice
 {
     int count;
     int reserve;
-    Symbol.SymbolType[] diceValues;
     public Symbol.SymbolType[] DiceValues { get; }
 
     public ESCDice()
     {
         count = 5;
         reserve = 0;
-        diceValues = new Symbol.SymbolType[10];
+        DiceValues = new Symbol.SymbolType[10];
+    }
+
+    public Symbol.SymbolType[] GetRealDice()
+    {
+        var values = new Symbol.SymbolType[count];
+        for (var i = 0; i < count; i++)
+        {
+            values[i] = DiceValues[i];
+        }
+        return values;
     }
 
     public void Degrade(int degradeCount)
@@ -58,7 +67,7 @@ class ESCDice
     {
         for (var i = 0; i < count; i++)
         {
-            diceValues[i] = Symbol.RollDiceSymbol();
+            DiceValues[i] = Symbol.RollDiceSymbol();
         }
     }
 
@@ -67,7 +76,7 @@ class ESCDice
         string diceString = "";
         for (var i = 0; i < count; i++)
         {
-            diceString += diceValues[i].ToString() + " ";
+            diceString += DiceValues[i].ToString() + " ";
         }
         Debug.Log(diceString);
     }

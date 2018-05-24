@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ESCTest : MonoBehaviour {
+    List<ESCPlayer> PlayerList = new List<ESCPlayer>();
 
 	// Use this for initialization
 	void Start () {
-        RandTest();
-        DiceThrowTest();
-        RoomTest();
+
+        //RandTest();
+        //DiceThrowTest();
+        //RoomTest();
+        GemTest();
     }
 
     void RandTest()
@@ -33,35 +36,68 @@ public class ESCTest : MonoBehaviour {
     {
         ESCMaze Maze;
         int PlayersCount = 5;
-        List<ESCPlayer> PlayerList;
 
         Maze = new ESCMaze();
-        PlayerList = new List<ESCPlayer>();
+
         for (var i = 0; i < PlayersCount; i++)
         {
             PlayerList.Add(new ESCPlayer(Maze));
         }
 
         PlayerList[0].Turn();
+        Print(0);
+        // public void PerformAction(ESCRoom.RoomDirection dir, ActionType action, int playerId)
+        PlayerList[0].PerformAction(ESCRoom.RoomDirection.Left, ActionType.Discover, -1);
+        Debug.Log("TYPE : " + PlayerList[0].currentRoom.Siblings[ESCRoom.RoomDirection.Left].type.ToString());
+        PlayerList[0].PerformAction(ESCRoom.RoomDirection.Left, ActionType.Move, -1);
+        PlayerList[0].Turn();
+        Print(0);
+    }
 
-        //public List<ActionType> roomAction;
-        //public Dictionary<ESCRoom.RoomDirection, List<ActionType>> siblingActions;
+    void GemTest()
+    {
+        ESCMaze Maze;
+        int PlayersCount = 5;
 
-        string ra = "";
-        foreach (ActionType action in PlayerList[0].roomAction)
+        Maze = new ESCMaze();
+
+        for (var i = 0; i < PlayersCount; i++)
+        {
+            PlayerList.Add(new ESCPlayer(Maze));
+        }
+
+        PlayerList[0].Turn();
+        Print(0);
+        // public void PerformAction(ESCRoom.RoomDirection dir, ActionType action, int playerId)
+        PlayerList[0].PerformAction(ESCRoom.RoomDirection.Left, ActionType.Discover, -1);
+        Debug.Log("TYPE : " + PlayerList[0].currentRoom.Siblings[ESCRoom.RoomDirection.Left].type.ToString());
+        PlayerList[0].PerformAction(ESCRoom.RoomDirection.Left, ActionType.Move, -1);
+        PlayerList[0].Turn();
+        Print(0);
+    }
+
+    void Print(int playerId)
+    {
+        PlayerList[playerId].dice.Print();
+        string ra = "Room ";
+        foreach (ActionType action in PlayerList[playerId].roomAction)
         {
             ra += action.ToString() + " ";
-            
+
         }
         Debug.Log(ra);
 
-        ra = "";
-        foreach (ESCRoom.RoomDirection dir in PlayerList[0].siblingActions.Keys)
+        ra = "Siblings ";
+        foreach (ESCRoom.RoomDirection dir in PlayerList[playerId].siblingActions.Keys)
         {
-            ra += PlayerList[0].siblingActions.ToString() + " : " + PlayerList[0].siblingActions[dir] + "\n";
+            ra += dir.ToString() + " : [";
+            foreach (ActionType action in PlayerList[playerId].siblingActions[dir])
+            {
+                ra += action.ToString() + ",";
+            }
+            ra += "]\n";
         }
         Debug.Log(ra);
-
     }
 
 	

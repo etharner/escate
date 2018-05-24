@@ -9,12 +9,12 @@ public class ESCEngine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Maze = new ESCMaze();
-        PlayerList = new List<ESCPlayer>();
-        for (var i = 0; i < PlayersCount; i++)
-        {
-            PlayerList.Add(new ESCPlayer(Maze));
-        }
+        //Maze = new ESCMaze();
+        //PlayerList = new List<ESCPlayer>();
+        //for (var i = 0; i < PlayersCount; i++)
+        //{
+        //    PlayerList.Add(new ESCPlayer(Maze));
+        //}
     }
 	
 	// Update is called once per frame

@@ -16,8 +16,8 @@ public enum ActionType
 }
 
 public class ESCPlayer {
-    ESCRoom currentRoom;
-    ESCDice dice;
+    public ESCRoom currentRoom; //public
+    public ESCDice dice; //public
     ESCMaze maze;
     public List<ActionType> roomAction;
     public Dictionary<ESCRoom.RoomDirection, List<ActionType>> siblingActions;
@@ -31,11 +31,14 @@ public class ESCPlayer {
         siblingActions = new Dictionary<ESCRoom.RoomDirection, List<ActionType>>();
     }
 
-    void AddAction(ESCRoom.RoomDirection dir)
+    void AddAction(ESCRoom.RoomDirection dir, ActionType action)
     {
-        ActionType action = currentRoom.Siblings[dir].EnterCondition.JudgeActions(dice.DiceValues);
         if (action != ActionType.None)
         {
+            if (!siblingActions.ContainsKey(dir))
+            {
+                siblingActions[dir] = new List<ActionType>();
+            }
             siblingActions[dir].Add(action);
         }
     }
@@ -52,19 +55,22 @@ public class ESCPlayer {
         };
         if (currentRoom.InnerCondition!= null)
         {
-            roomAction.Add(currentRoom.InnerCondition.JudgeActions(dice.DiceValues));
+            roomAction.Add(currentRoom.InnerCondition.JudgeActions(dice.GetRealDice()));
         }
 
         foreach (ESCRoom.RoomDirection dir in currentRoom.Siblings.Keys)
         {
-            ActionType discoverConditionAction = discoverCondition.JudgeActions(dice.DiceValues);
-            if (currentRoom.Siblings[dir] == null && discoverConditionAction != ActionType.None)
+            ActionType discoverConditionAction = discoverCondition.JudgeActions(dice.GetRealDice());
+            if (currentRoom.Siblings[dir] == null)
             {
-                siblingActions[dir].Add(discoverConditionAction);
+                if (discoverConditionAction != ActionType.None)
+                {
+                    AddAction(dir, discoverConditionAction);
+                }
             }
             else
             {
-                AddAction(dir);
+                AddAction(dir, currentRoom.Siblings[dir].EnterCondition.JudgeActions(dice.GetRealDice()));
             }
         }
     }
@@ -103,5 +109,8 @@ public class ESCPlayer {
                 playerList.Remove(this);
                 break;
         }
+
+        roomAction.Clear();
+        siblingActions.Clear();
     }
 }

@@ -80,6 +80,12 @@ public class ESCCondition
         var diceSymbols = new Dictionary<Symbol.SymbolType, int>();
         var conditionSymbols = new Dictionary<Symbol.SymbolType, int>();
 
+        foreach (Symbol.SymbolType s in Enum.GetValues(typeof(Symbol.SymbolType)))
+        {
+            diceSymbols[s] = 0;
+            conditionSymbols[s] = 0;
+        }
+
         foreach (Symbol.SymbolType s in dice)
         {
             ++diceSymbols[s];
