@@ -21,19 +21,19 @@ public class Symbol
         diceSymbols.AddRange(Enum.GetValues(typeof(SymbolType)).Cast<SymbolType>().ToList());
         diceSymbols.Add(SymbolType.Human);
 
-        return diceSymbols[ESCUtil.rand.Next(diceSymbols.Count)];
+        return diceSymbols[ESCUtil.Rand.Next(diceSymbols.Count)];
     }
 
     public static SymbolType RollLockCondition()
     {
         var lockSymbols = new List<SymbolType>() { SymbolType.Key, SymbolType.Torch };
-        return lockSymbols[ESCUtil.rand.Next(lockSymbols.Count)];
+        return lockSymbols[ESCUtil.Rand.Next(lockSymbols.Count)];
     }
 
     public static SymbolType RollCondition()
     {
         SymbolType[] conditions = { SymbolType.Human, SymbolType.Torch, SymbolType.Key };
-        return conditions[ESCUtil.rand.Next(conditions.Length)];
+        return conditions[ESCUtil.Rand.Next(conditions.Length)];
     }
 
 }

@@ -10,27 +10,40 @@ public class ESCMaze {
     Dictionary<ESCRoom.RoomType, List<ESCRoom>> roomsPool;
     static Dictionary<ESCRoom.RoomType, int> roomsCount = new Dictionary<ESCRoom.RoomType, int>()
     {
-        { ESCRoom.RoomType.Entrance, 1 },
         { ESCRoom.RoomType.Normal, 7 },
         { ESCRoom.RoomType.MinorLock, 8 },
         { ESCRoom.RoomType.BigLock, 4 },
-        { ESCRoom.RoomType.Gem, 1 },
         { ESCRoom.RoomType.Exit, 1 }
     };
 
-  
-    // Use this for initialization
-    void Start () {
+    public ESCMaze() {
+        Gems = CalcGems();
         roomsPool = new Dictionary<ESCRoom.RoomType, List<ESCRoom>>();
         foreach (ESCRoom.RoomType rt in roomsCount.Keys)
         {
             roomsPool[rt].Add(new ESCRoom(this, rt));
         }
-        Entrance = roomsPool[ESCRoom.RoomType.Entrance][0];
+        Entrance = new ESCRoom(this, ESCRoom.RoomType.Entrance);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    int CalcGems()
+    {
+        int[] gemsCount = { 9, 9, 13, 16, 18 };
+
+        return gemsCount[GameObject.FindObjectOfType<ESCEngine>().PlayersCount - 1];
+    }
+
+    public ESCRoom RequestRoom()
+    {
+        var keyList = new List<ESCRoom.RoomType>(roomsPool.Keys);
+        ESCRoom.RoomType key = keyList[ESCUtil.Rand.Next(0, keyList.Count)];
+        ESCRoom ejectedRoom = roomsPool[key][0];
+        roomsPool[key].RemoveAt(0);
+        if (roomsPool[key].Count == 0)
+        {
+            roomsPool.Remove(key);
+        }
+
+        return ejectedRoom;
+    }
 }

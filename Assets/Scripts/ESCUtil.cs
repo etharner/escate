@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class ESCUtil {
-    static public System.Random rand = new System.Random();
+    static public System.Random Rand = new System.Random();
 }

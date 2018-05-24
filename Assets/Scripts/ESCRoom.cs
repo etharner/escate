@@ -16,31 +16,48 @@ public class ESCRoom {
         Exit
     }
 
-    public ESCRoom Parent { get; set; }
-    public ESCRoom[] Siblings { get; }
+    public enum RoomDirection
+    {
+        Left,
+        Right,
+        Top,
+        Bottom
+    }
+
+    ESCMaze maze;
+    public Dictionary<RoomDirection, ESCRoom> Siblings { get; set; }
+    public int SiblingsAlive;
     RoomType type;
     public ESCCondition EnterCondition;
     public ESCCondition InnerCondition;
     
-	public ESCRoom(ESCMaze maze, RoomType roomType)
+	public ESCRoom(ESCMaze m, RoomType roomType)
     {
-        Parent = null;
+        maze = m;
         type = roomType;
         EnterCondition = new ESCCondition(maze, ESCCondition.ConditionType.Enter);
+        SiblingsAlive = 0;
 
         switch (roomType)
         {
             case RoomType.Entrance:
-                Siblings = new ESCRoom[2];
+                Siblings = new Dictionary<RoomDirection, ESCRoom>()
+                {
+                    { RoomDirection.Left, null },
+                    { RoomDirection.Right, null }
+                };
+                InnerCondition = null;
+                break;
+
+            case RoomType.Normal:
+                InnerCondition = null;
                 break;
 
             case RoomType.MinorLock:
-                Siblings = new ESCRoom[ESCUtil.rand.Next(2, 3 + 1)];
                 InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.MinorLock);
                 break;
 
             case RoomType.BigLock:
-                Siblings = new ESCRoom[ESCUtil.rand.Next(2, 3 + 1)];
                 InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.BigLock);
                 break;
 
@@ -48,5 +65,35 @@ public class ESCRoom {
                 InnerCondition = new ESCCondition(maze, ESCCondition.ConditionType.Exit);
                 break;
         }
+    }
+
+    public void GenerateDirectionPockets(RoomDirection parentDirection)
+    {
+        var roomDirections = new List<RoomDirection>(Enum.GetValues(typeof(RoomDirection)).Cast<RoomDirection>().ToList());
+        roomDirections.Remove(parentDirection);
+        Siblings.Add(parentDirection, null);
+
+        Siblings = new Dictionary<RoomDirection, ESCRoom>();
+        int siblingsCount = ESCUtil.Rand.Next(2, 3 + 1);
+        for (var i = 0; i < siblingsCount; i++)
+        {
+            RoomDirection dir = roomDirections[0];
+            roomDirections.RemoveAt(0);
+            Siblings.Add(dir, null);
+        }
+    }
+
+    //public List<RoomDirection> DirectionsAvailable()
+    //{
+    //    var dirAvailable = new List<RoomDirection>();
+    //    for (var key in )
+    //}
+
+    public void InsertSibling(RoomDirection dir)
+    {
+        ESCRoom newRoom = maze.RequestRoom();
+        newRoom.GenerateDirectionPockets(dir);
+        Siblings[dir] = maze.RequestRoom();
+        SiblingsAlive++;
     }
 }
